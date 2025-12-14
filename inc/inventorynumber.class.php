@@ -43,6 +43,14 @@ if (!defined('GLPI_ROOT')) {
 */
 
 class PluginIpphonescannerInventoryNumber {
+      /**
+       * Install or migrate plugin database schema for this class
+       * @param Migration $migration
+       */
+      public static function install($migration) {
+        // No DB schema for this class, but method required by GLPI
+        return true;
+      }
     private $bySerialArray           = false;
     private $byMACArray              = false;
 
