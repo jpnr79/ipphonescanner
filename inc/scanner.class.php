@@ -40,6 +40,16 @@ use Nmap\Nmap;
 */
 
 class PluginIpphonescannerScanner {
+    /**
+     * Uninstall plugin database schema for this class
+     * @param Migration $migration
+     */
+    public static function uninstall($migration) {
+      global $DB;
+      $table = 'glpi_plugin_ipphonescanner_scanner';
+      $query = "DROP TABLE IF EXISTS `$table`";
+      $DB->doQuery($query);
+    }
   private $stack            = false;
   private $poolMaxSize      = false;
   private $poolCur          = false;
