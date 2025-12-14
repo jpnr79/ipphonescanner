@@ -1,3 +1,4 @@
+use CronTask;
 <?php
 /*
  -------------------------------------------------------------------------
@@ -82,7 +83,6 @@ class PluginIpphonescannerProcess {
       CronTask::Register(__CLASS__, 'iPPhoneScanning', DAY_TIMESTAMP,
                          ['param' => 24,
                           'mode'  => CronTask::MODE_EXTERNAL]);
-   use CronTask;
    }
 
    /**
