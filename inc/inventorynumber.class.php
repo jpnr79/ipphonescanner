@@ -1,10 +1,3 @@
-  /**
-   * Install or migrate plugin database schema for this class
-   * @param Migration $migration
-   */
-  public static function install($migration) {
-    // No migration logic needed for inventory numbers yet
-  }
 <?php
 /*
  -------------------------------------------------------------------------
