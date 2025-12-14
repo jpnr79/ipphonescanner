@@ -79,9 +79,10 @@ class PluginIpphonescannerProcess {
    * @param Migration $migration the migration object
    */
    public static function install(Migration $migration) {
-      Crontask::Register(__CLASS__, 'iPPhoneScanning', DAY_TIMESTAMP,
+      CronTask::Register(__CLASS__, 'iPPhoneScanning', DAY_TIMESTAMP,
                          ['param' => 24,
                           'mode'  => CronTask::MODE_EXTERNAL]);
+   use CronTask;
    }
 
    /**
