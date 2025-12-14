@@ -1,19 +1,28 @@
-  /**
-   * Install or migrate plugin database schema for this class
-   * @param Migration $migration
-   */
-  public static function install($migration) {
-    // Example migration logic: create a table if needed
-    global $DB;
-    $table = 'glpi_plugin_ipphonescanner_scanner';
-    $query = "CREATE TABLE IF NOT EXISTS `$table` (
-      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-      `host` varchar(255) NOT NULL DEFAULT '',
-      `port` int(11) unsigned NOT NULL DEFAULT 0,
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
-    $DB->doQuery($query);
-  }
+// ...existing code...
+
+class PluginIpphonescannerScanner {
+    private $stack            = false;
+    private $poolMaxSize      = false;
+    private $poolCur          = false;
+    private $inventorynumbers = false;
+    private $client           = false;
+
+    /**
+     * Install or migrate plugin database schema for this class
+     * @param Migration $migration
+     */
+    public static function install($migration) {
+        // Example migration logic: create a table if needed
+        global $DB;
+        $table = 'glpi_plugin_ipphonescanner_scanner';
+        $query = "CREATE TABLE IF NOT EXISTS `$table` (
+            `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+            `host` varchar(255) NOT NULL DEFAULT '',
+            `port` int(11) unsigned NOT NULL DEFAULT 0,
+            PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+        $DB->doQuery($query);
+    }
 <?php
 /*
  -------------------------------------------------------------------------
