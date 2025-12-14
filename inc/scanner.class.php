@@ -1,83 +1,71 @@
 // ...existing code...
 
+<?php
+/*
+ -------------------------------------------------------------------------
+ IpPhoneScanner plugin for GLPI
+ Copyright (C) 2017 by the IpPhoneScanner Development Team.
+
+ https://github.com/pluginsGLPI/ipphonescanner
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of IpPhoneScanner.
+
+ IpPhoneScanner is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ IpPhoneScanner is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with IpPhoneScanner. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------
+ */
+
+if (!defined('GLPI_ROOT')) {
+   die("Sorry. You can't access directly to this file");
+}
+
+use Nmap\Nmap;
+
+/**
+* Scanner class
+* @since 1.0
+*/
+
 class PluginIpphonescannerScanner {
-    private $stack            = false;
-    private $poolMaxSize      = false;
-    private $poolCur          = false;
-    private $inventorynumbers = false;
-    private $client           = false;
-
-  <?php
-  /*
-   -------------------------------------------------------------------------
-   IpPhoneScanner plugin for GLPI
-   Copyright (C) 2017 by the IpPhoneScanner Development Team.
-
-   https://github.com/pluginsGLPI/ipphonescanner
-   -------------------------------------------------------------------------
-
-   LICENSE
-
-   This file is part of IpPhoneScanner.
-
-   IpPhoneScanner is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-   IpPhoneScanner is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with IpPhoneScanner. If not, see <http://www.gnu.org/licenses/>.
-   --------------------------------------------------------------------------
-   */
-
-  if (!defined('GLPI_ROOT')) {
-     die("Sorry. You can't access directly to this file");
-  }
-
-  use Nmap\Nmap;
+  private $stack            = false;
+  private $poolMaxSize      = false;
+  private $poolCur          = false;
+  private $inventorynumbers = false;
+  private $client           = false;
 
   /**
-  * Scanner class
-  * @since 1.0
-  */
+   * Install or migrate plugin database schema for this class
+   * @param Migration $migration
+   */
+  public static function install($migration) {
+    // Example migration logic: create a table if needed
+    global $DB;
+    $table = 'glpi_plugin_ipphonescanner_scanner';
+    $query = "CREATE TABLE IF NOT EXISTS `$table` (
+      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      `host` varchar(255) NOT NULL DEFAULT '',
+      `port` int(11) unsigned NOT NULL DEFAULT 0,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+    $DB->doQuery($query);
+  }
 
-  class PluginIpphonescannerScanner {
-      private $stack            = false;
-      private $poolMaxSize      = false;
-      private $poolCur          = false;
-      private $inventorynumbers = false;
-      private $client           = false;
-
-      /**
-       * Install or migrate plugin database schema for this class
-       * @param Migration $migration
-       */
-      public static function install($migration) {
-          // Example migration logic: create a table if needed
-          global $DB;
-          $table = 'glpi_plugin_ipphonescanner_scanner';
-          $query = "CREATE TABLE IF NOT EXISTS `$table` (
-              `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-              `host` varchar(255) NOT NULL DEFAULT '',
-              `port` int(11) unsigned NOT NULL DEFAULT 0,
-              PRIMARY KEY (`id`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
-          $DB->doQuery($query);
-      }
-    private $stack            = false;
-    private $poolMaxSize      = false;
-    private $poolCur          = false;
-    private $inventorynumbers = false;
-    private $client           = false;
-
-    function __construct($poolmaxsize, $inventorynumbers) {
-      $this->stack            = array();
-      $this->poolMaxSize      = $poolmaxsize;
+  function __construct($poolmaxsize, $inventorynumbers) {
+    $this->stack            = array();
+    $this->poolMaxSize      = $poolmaxsize;
       $this->poolCur          = 0;
       $this->inventorynumbers = $inventorynumbers;
       $this->client           = new \GuzzleHttp\Client();
