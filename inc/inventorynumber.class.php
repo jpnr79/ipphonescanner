@@ -36,6 +36,14 @@ if (!defined('GLPI_ROOT')) {
 */
 
 class PluginIpphonescannerInventoryNumber {
+        /**
+         * Uninstall plugin database schema for this class
+         * @param Migration $migration
+         */
+        public static function uninstall($migration) {
+          // No DB schema for this class, but method required by GLPI
+          return true;
+        }
       /**
        * Install or migrate plugin database schema for this class
        * @param Migration $migration
