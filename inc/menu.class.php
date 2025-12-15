@@ -51,7 +51,7 @@ class PluginIpphonescannerMenu extends CommonGLPI {
       return $menu;
    }
 
-   public static function canCreate() {
+   public static function canCreate(): bool {
       return false;
    }
 }
