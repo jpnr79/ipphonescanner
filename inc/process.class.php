@@ -1,5 +1,7 @@
 use CronTask;
 <?php
+
+if (!defined('GLPI_ROOT')) { define('GLPI_ROOT', realpath(__DIR__ . '/../..')); }
 /*
  -------------------------------------------------------------------------
  IpPhoneScanner plugin for GLPI
