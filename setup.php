@@ -68,11 +68,31 @@ function plugin_version_ipphonescanner() {
  */
 function plugin_ipphonescanner_check_prerequisites() {
    // Strict version check (could be less strict, or could allow various version)
-   if (version_compare(GLPI_VERSION, '9.1', 'lt')) {
+   // GLPI must be at least 9.1 ...
+   $glpi_version = '0.0.0';
+   $version_file = defined('GLPI_ROOT') ? GLPI_ROOT . '/version' : __DIR__ . '/../../../version';
+   if (file_exists($version_file)) {
+      $glpi_version = trim(file_get_contents($version_file));
+   }
+   $ok = version_compare($glpi_version, '9.1', '>=');
+   if (!$ok) {
+      $msg = '';
       if (method_exists('Plugin', 'messageIncompatible')) {
-         echo Plugin::messageIncompatible('core', '9.1');
+         $msg = Plugin::messageIncompatible('core', '9.1');
+         echo $msg;
       } else {
-         echo "This plugin requires GLPI >= 9.1";
+         $msg = "This plugin requires GLPI >= 9.1";
+         echo $msg;
+      }
+      // Robust error logging
+      if (!class_exists('Toolbox') && defined('GLPI_ROOT') && file_exists(GLPI_ROOT . '/src/Toolbox.php')) {
+         require_once GLPI_ROOT . '/src/Toolbox.php';
+      }
+      if (class_exists('Toolbox') && method_exists('Toolbox', 'logInFile')) {
+         Toolbox::logInFile('ipphonescanner', $msg);
+      } else if (defined('GLPI_ROOT')) {
+         $logfile = GLPI_ROOT . '/files/_log/ipphonescanner-error.log';
+         @file_put_contents($logfile, $msg."\n", FILE_APPEND);
       }
       return false;
    }
@@ -92,7 +112,7 @@ function plugin_ipphonescanner_check_config($verbose = false) {
    }
 
    if ($verbose) {
-      _e('Installed / not configured', 'ipphonescanner');
+      echo 'Installed / not configured (ipphonescanner)';
    }
    return false;
 }
