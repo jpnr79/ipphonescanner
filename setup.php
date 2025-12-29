@@ -69,12 +69,14 @@ function plugin_version_ipphonescanner() {
 function plugin_ipphonescanner_check_prerequisites() {
    // Strict version check (could be less strict, or could allow various version)
    // GLPI must be at least 9.1 ...
-   $glpi_version = '0.0.0';
+   $glpi_version = 'unknown';
    $version_file = defined('GLPI_ROOT') ? GLPI_ROOT . '/version' : __DIR__ . '/../../../version';
-   if (file_exists($version_file)) {
+   if (is_file($version_file)) {
       $glpi_version = trim(file_get_contents($version_file));
+   } elseif (defined('GLPI_VERSION')) {
+      $glpi_version = constant('GLPI_VERSION');
    }
-   $ok = version_compare($glpi_version, '9.1', '>=');
+   $ok = ($glpi_version !== 'unknown') && version_compare($glpi_version, '9.1', '>=');
    if (!$ok) {
       $msg = '';
       if (method_exists('Plugin', 'messageIncompatible')) {
